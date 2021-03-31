@@ -4,6 +4,7 @@
 
 // Set up an empty cart for use on this page.
 const cart = new Cart([]);
+let counter=0;
 // console.log(Product.allProducts);
 // On screen load, we call this method to put all of the busmall options
 // (the things in the Product.allProducts array) into the drop down list.
@@ -16,7 +17,6 @@ function populateForm() {
     selectElement.appendChild(itemsOption);
     itemsOption.textContent=Product.allProducts[i].name;
   }
-
 }
 
 // When someone submits the form, we need to add the selected item to the cart
@@ -29,6 +29,7 @@ function handleSubmit(event) {
   // Do all the things ...
   addSelectedItemToCart(event);
   cart.saveToLocalStorage();
+  counter++;
   updateCounter();
   updateCartPreview();
 
@@ -39,19 +40,16 @@ function addSelectedItemToCart(event) {
   // TODO: suss out the item picked from the select list
   // TODO: get the quantity
   // TODO: using those, add one item to the Cart
-  let item = event.target.items.value;
-  let quantity = event.target.quantity.value;
+  let itemSelect = document.getElementById('items').value;
+  let quantitySelect = document.getElementById('quantity').value;
 
-  cart.addItem(item,quantity);
+  cart.items.push([itemSelect,quantitySelect]);
 }
 
 // TODO: Update the cart count in the header nav with the number of items in the Cart
 function updateCounter() {
   let itemCount = document.getElementById('itemCount')
-  let data = JSON.parse(localStorage.getItem('cart'));
-  let count = data.length;
-  
-
+  itemCount.textContent = ` (${counter}) `;
 }
 
 // TODO: As you add items into the cart, show them (item & quantity) in the cart preview div
@@ -65,7 +63,9 @@ function updateCartPreview() {
   
   let liEl=document.createElement('li');
   ulEl.appendChild(liEl);
-  liEl.textContent =`${data}`;
+  for (let i=0; i<data.length; i++){
+    liEl.textContent =`${data[i]}`;
+  }
   
 }
 
