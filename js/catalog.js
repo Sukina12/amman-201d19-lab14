@@ -4,7 +4,7 @@
 
 // Set up an empty cart for use on this page.
 const cart = new Cart([]);
-
+// console.log(Product.allProducts);
 // On screen load, we call this method to put all of the busmall options
 // (the things in the Product.allProducts array) into the drop down list.
 function populateForm() {
@@ -14,7 +14,7 @@ function populateForm() {
   for (let i in Product.allProducts) {
     let itemsOption = document.createElement('option')
     selectElement.appendChild(itemsOption);
-    itemsOption.value=Product[i];
+    itemsOption.textContent=Product.allProducts[i].name;
   }
 
 }
@@ -27,7 +27,7 @@ function handleSubmit(event) {
   // TODO: Prevent the page from reloading
   event.preventDefault();
   // Do all the things ...
-  addSelectedItemToCart();
+  addSelectedItemToCart(event);
   cart.saveToLocalStorage();
   updateCounter();
   updateCartPreview();
@@ -35,19 +35,38 @@ function handleSubmit(event) {
 }
 
 // TODO: Add the selected item and quantity to the cart
-function addSelectedItemToCart() {
+function addSelectedItemToCart(event) {
   // TODO: suss out the item picked from the select list
   // TODO: get the quantity
   // TODO: using those, add one item to the Cart
+  let item = event.target.items.value;
+  let quantity = event.target.quantity.value;
+
+  cart.addItem(item,quantity);
 }
 
 // TODO: Update the cart count in the header nav with the number of items in the Cart
-function updateCounter() {}
+function updateCounter() {
+  let itemCount = document.getElementById('itemCount')
+  let data = JSON.parse(localStorage.getItem('cart'));
+  let count = data.length;
+  
+
+}
 
 // TODO: As you add items into the cart, show them (item & quantity) in the cart preview div
 function updateCartPreview() {
   // TODO: Get the item and quantity from the form
   // TODO: Add a new element to the cartContents div with that information
+  let resultPart = document.getElementById('cartContents');
+  let ulEl = document.createElement ('ul');
+  resultPart.appendChild(ulEl);
+  let data = JSON.parse(localStorage.getItem('cart'));
+  
+  let liEl=document.createElement('li');
+  ulEl.appendChild(liEl);
+  liEl.textContent =`${data}`;
+  
 }
 
 // Set up the "submit" event listener on the form.
